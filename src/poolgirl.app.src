@@ -1,13 +1,13 @@
 {application, poolgirl, [
 	  {description, "Erlang/Elixir worker pool"}
-	, {vsn, "1.1.4"}
+	, {vsn, "1.1.5"}
 	, {modules, []}
 	, {applications, [kernel,stdlib]}
 	, {mod, {poolgirl_app, []}}
 
   , {maintainers, ["Gregoire Lejeune"]}
   , {licenses, ["BSD-3"]}
-  , {links, [{"Github", "https://github.com/botsunit/poolgirl"}]}
+  , {links, [{"Github", "https://github.com/G-Corp/poolgirl"}]}
   , {files, ["src/*"
              , "lib/*"
              , "include/*"
