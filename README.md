@@ -136,5 +136,5 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR `AS IS` AND ANY EXPRESS OR IMPLIED WARRA
 
 
 <table width="100%" border="0" summary="list of modules">
-<tr><td><a href="https://github.com/botsunit/poolgirl/blob/master/doc/poolgirl.md" class="module">poolgirl</a></td></tr></table>
+<tr><td><a href="https://github.com/G-Corp/poolgirl/blob/master/doc/poolgirl.md" class="module">poolgirl</a></td></tr></table>
 
