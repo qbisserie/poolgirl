@@ -550,6 +550,7 @@ add_workers(Name, #state{pools = Pools, workers = Workers}) ->
                                   try
                                     case supervisor:start_child(SupervisorPid, Args) of
                                       {ok, Pid} ->
+                                        error_logger:error_msg("Worker ~p (~p) started (~p)", [Name, Args, Pid]),
                                         MRef = erlang:monitor(process, Pid),
                                         ets:insert(Workers, #worker{pool = Name,
                                                                     pid = Pid,
@@ -557,7 +558,8 @@ add_workers(Name, #state{pools = Pools, workers = Workers}) ->
                                                                     since = Epoch,
                                                                     assigned = false}),
                                         Count + 1;
-                                      {ok, Pid, _} ->
+                                      {ok, Pid, Info} ->
+                                        error_logger:error_msg("Worker ~p (~p) started (~p) ~p", [Name, Args, Pid, Info]),
                                         MRef = erlang:monitor(process, Pid),
                                         ets:insert(Workers, #worker{pool = Name,
                                                                     pid = Pid,
@@ -565,11 +567,13 @@ add_workers(Name, #state{pools = Pools, workers = Workers}) ->
                                                                     since = Epoch,
                                                                     assigned = false}),
                                         Count + 1;
-                                      {error, _} ->
+                                      {error, Reason} ->
+                                        error_logger:error_msg("Failed to start worker ~p (~p) : ~p~n", [Name, Args, Reason]),
                                         Count
                                     end
                                   catch
-                                    _:_ ->
+                                    Type:Msg ->
+                                      error_logger:error_msg("Failed to start worker ~p (~p) : ~p:~p~n", [Name, Args, Type, Msg]),
                                       Count
                                   end
                       end, length(Size), lists:seq(1, AddSize)),
@@ -592,4 +596,3 @@ pool_options(Pool, Options, CommonOptions) ->
 epoch() ->
   {Mega, Sec, Micro} = os:timestamp(),
   (Mega * 1000000 + Sec) * 1000 + round(Micro / 1000).
-
