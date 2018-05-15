@@ -39,14 +39,16 @@ add_pool(Name, {Module, Function, _}) ->
            shutdown => 5000,
            type => supervisor,
            modules => [poolgirl_worker_sup]}) of
-    {ok, PID} ->
+    {ok, PID} when is_pid(PID) ->
       {ok, PID};
-    {ok, PID, _Info} ->
+    {ok, PID, _Info} when is_pid(PID) ->
       {ok, PID};
     {error, {already_started, PID}} ->
       {ok, PID};
-    E ->
-      E
+    {error, _} = E ->
+      E;
+    _Other ->
+      {error, ignore}
   end.
 
 remove_pool(PID) ->

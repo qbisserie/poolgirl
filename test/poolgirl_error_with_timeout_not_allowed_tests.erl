@@ -27,7 +27,7 @@ poolgirl_error_with_timeout_not_allowed_tests_test_() ->
     {timeout, 120,
      fun() ->
          ?assertEqual([], poolgirl:pools()),
-         ?assertEqual({error, timeout},
+         ?assertEqual({error, empty_pool},
                       poolgirl:add_pool(failed,
                                         {failed_timeout_worker, start_link, []},
                                         #{size => 1, chunk_size => 1, allow_empty_pool => false})),

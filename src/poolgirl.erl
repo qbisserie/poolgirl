@@ -130,7 +130,7 @@ add_pool(Name, MFArgs, Options) ->
       case maps:get(allow_empty_pool, Options, false) of
         false ->
           remove_pool(Name),
-          {error, timeout};
+          {error, empty_pool};
         true ->
           {ok, 0}
       end;
@@ -549,8 +549,8 @@ add_workers(Name, #state{pools = Pools, workers = Workers}) ->
           Size1 = lists:foldl(fun(_, Count) ->
                                   try
                                     case supervisor:start_child(SupervisorPid, Args) of
-                                      {ok, Pid} ->
-                                        error_logger:error_msg("Worker ~p (~p) started (~p)", [Name, Args, Pid]),
+                                      {ok, Pid} when is_pid(Pid) ->
+                                        error_logger:info_msg("Worker ~p (~p) started (~p)", [Name, Args, Pid]),
                                         MRef = erlang:monitor(process, Pid),
                                         ets:insert(Workers, #worker{pool = Name,
                                                                     pid = Pid,
@@ -558,8 +558,8 @@ add_workers(Name, #state{pools = Pools, workers = Workers}) ->
                                                                     since = Epoch,
                                                                     assigned = false}),
                                         Count + 1;
-                                      {ok, Pid, Info} ->
-                                        error_logger:error_msg("Worker ~p (~p) started (~p) ~p", [Name, Args, Pid, Info]),
+                                      {ok, Pid, Info} when is_pid(Pid) ->
+                                        error_logger:info_msg("Worker ~p (~p) started (~p) ~p", [Name, Args, Pid, Info]),
                                         MRef = erlang:monitor(process, Pid),
                                         ets:insert(Workers, #worker{pool = Name,
                                                                     pid = Pid,
@@ -569,6 +569,9 @@ add_workers(Name, #state{pools = Pools, workers = Workers}) ->
                                         Count + 1;
                                       {error, Reason} ->
                                         error_logger:error_msg("Failed to start worker ~p (~p) : ~p~n", [Name, Args, Reason]),
+                                        Count;
+                                      _Other ->
+                                        error_logger:info_msg("Worker ~p (~p) not started", [Name, Args]),
                                         Count
                                     end
                                   catch
