@@ -115,6 +115,8 @@ poolgirl_test_() ->
          end || _ <- lists:seq(1, 100)]
     end,
     fun() ->
+        ?assertEqual([test0, test1, test2, test3], poolgirl:pools()),
+        ?assertEqual({ok, 4, 4}, poolgirl:size(test0)),
         ?assertMatch(7,
                      poolgirl:transaction(
                        test0,
@@ -139,6 +141,9 @@ poolgirl_test_() ->
                        fun(Worker) ->
                            gen_server:call(Worker, kill)
                        end)),
+        timer:sleep(100),
+        ?assertEqual([test0, test1, test2, test3], poolgirl:pools()),
+        ?assertEqual({ok, 3, 3}, poolgirl:size(test0)),
         ?assertMatch(7,
                      poolgirl:transaction(
                        test0,
@@ -235,4 +240,3 @@ poolgirl_test_() ->
     end
    ]
   }.
-

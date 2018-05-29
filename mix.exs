@@ -8,7 +8,7 @@ defmodule Poolgirl.Mixfile do
   def project do
     [
       app: :poolgirl,
-      version: "1.2.1",
+      version: "1.3.0",
       elixir: "~> 1.2",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -27,7 +27,7 @@ defmodule Poolgirl.Mixfile do
 
   defp deps do
     [
-      {:doteki, "~> 1.0.6"}
+      {:doteki, "~> 1.1.0"}
     ]
   end
 

@@ -1,11 +1,10 @@
 {application, poolgirl, [
 	  {description, "Erlang/Elixir worker pool"}
-	, {vsn, "1.2.1"}
+	, {vsn, "1.3.0"}
 	, {modules, []}
 	, {applications, [kernel,stdlib]}
 	, {mod, {poolgirl_app, []}}
 
-  , {maintainers, ["Gregoire Lejeune"]}
   , {licenses, ["BSD-3"]}
   , {links, [{"Github", "https://github.com/G-Corp/poolgirl"}]}
   , {files, ["src/*"
