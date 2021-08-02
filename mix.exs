@@ -27,7 +27,7 @@ defmodule Poolgirl.Mixfile do
 
   defp deps do
     [
-      {:doteki, "~> 1.1.0"}
+      {:doteki, git: "git://github.com/G-Corp/doteki.git", tag: "1.1.0"}
     ]
   end
 
